@@ -1,0 +1,17 @@
+Package: uncertR
+Type: Package
+Title: Bootstrap Prediction Uncertainty and Its Biological Drivers in Transcriptomic Models
+Version: 0.0.0.9000
+Authors@R: person("Tanay", "Belapurkar", email = "btanay041@gmail.com", role = c("aut", "cre"))
+Description: Fits bootstrap ensembles of penalized regression models on bulk
+    transcriptomic data, derives per-sample uncertainty scores from
+    out-of-bag predictions, and tests whether technical covariates explain that uncertainty.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.2.0)
+Imports: glmnet, future.apply, splines, stats, graphics
+Suggests: testthat (>= 3.0.0), immunedeconv, SummarizedExperiment, knitr, rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.0

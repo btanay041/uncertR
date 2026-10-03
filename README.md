@@ -1,5 +1,8 @@
 # uncertR
-Bootstrap-based prediction uncertainty for transcriptomic drug-response models, and a test of which biological/technical covariates drive it.
+
+Bootstrap-based prediction uncertainty for transcriptomic drug-response models,
+and a test of which biological/technical covariates drive it.
+
 ```r
 fit <- boot_uncertainty(expr, ic50, B = 200)          # OOB bootstrap, glmnet
 unc <- uncertainty_score(fit, metric = "ci_width")
