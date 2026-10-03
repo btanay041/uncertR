@@ -1,0 +1,10 @@
+---
+title: "Getting started with uncertR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with uncertR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+TODO: worked example on a bundled GDSC/CCLE subset.
