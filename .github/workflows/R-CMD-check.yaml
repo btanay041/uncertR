@@ -18,12 +18,4 @@ jobs:
           dependencies: '"hard"'
           extra-packages: any::rcmdcheck
 
-      - name: Install immunedeconv
-        run: |
-          install.packages("remotes")
-          remotes::install_github("omnideconv/immunedeconv")
-        shell: Rscript {0}
-
       - uses: r-lib/actions/check-r-package@v2
-        with:
-          dependencies: '"hard"'
