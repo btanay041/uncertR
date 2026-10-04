@@ -11,7 +11,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.2.0)
 Imports: glmnet, future.apply, splines, stats, graphics
-Suggests: SummarizedExperiment, knitr, rmarkdown
-Config/testthat/edition: 3
+Suggests: immunedeconv, SummarizedExperiment, knitr, rmarkdown
+Remotes: omnideconv/immunedeconv
+VignetteBuilder: knitrConfig/testthat/edition: 3
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0
