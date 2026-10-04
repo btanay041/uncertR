@@ -23,7 +23,7 @@ tumor_covariates <- function(expr, methods = NULL, extra = NULL,
     out$n_detected <- colSums(expr > 0)
   }
   for (m in methods) {
-    if (!"immunedeconv" %in% rownames(installed.packages()))
+    if (!"immunedeconv" %in% rownames(utils::installed.packages()))
       stop("Install immunedeconv to use deconvolution methods.")
     deconvolute <- getExportedValue("immunedeconv", "deconvolute")
     
