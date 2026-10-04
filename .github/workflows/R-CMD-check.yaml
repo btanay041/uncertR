@@ -1,9 +1,11 @@
 on: [push, pull_request]
+
 name: R-CMD-check
 
 jobs:
   check:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -14,5 +16,11 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
+
+      - name: Install immunedeconv
+        run: |
+          install.packages("remotes")
+          remotes::install_github("omnideconv/immunedeconv")
+        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
