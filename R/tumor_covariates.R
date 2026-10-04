@@ -18,47 +18,48 @@ tumor_covariates <- function(expr, methods = NULL, extra = NULL,
                              technical = TRUE) {
   expr <- as.matrix(expr)
   out <- data.frame(row.names = colnames(expr))
+
   if (technical) {
     out$log_lib_size <- log10(colSums(expr) + 1)
     out$n_detected <- colSums(expr > 0)
   }
-  for (m in methods) {
-    if (!requireNamespace("immunedeconv", quietly = TRUE))
-      stop("Install immunedeconv to use deconvolution methods.")
-    res <- immunedeconv::deconvolute(expr, method = m)
-    mat <- as.matrix(res[, -1])
-    rownames(mat) <- paste(m, res[[1]], sep = "_")
-    out <- cbind(out, t(mat)[rownames(out), , drop = FALSE])
+
+  if (!is.null(methods) && length(methods) > 0) {
+
+    if (!requireNamespace("immunedeconv", quietly = TRUE)) {
+      stop(
+        "The 'immunedeconv' package is required when 'methods' is specified. ",
+        "Install it from GitHub with ",
+        "remotes::install_github('omnideconv/immunedeconv').",
+        call. = FALSE
+      )
+    }
+
+    deconvolute <- getExportedValue(
+      "immunedeconv",
+      "deconvolute"
+    )
+
+    for (m in methods) {
+      res <- deconvolute(expr, method = m)
+
+      mat <- as.matrix(res[, -1, drop = FALSE])
+      rownames(mat) <- paste(m, res[[1]], sep = "_")
+
+      out <- cbind(
+        out,
+        t(mat)[rownames(out), , drop = FALSE]
+      )
+    }
   }
+
   if (!is.null(extra)) {
     extra <- as.data.frame(extra)
-    out <- cbind(out, extra[rownames(out), , drop = FALSE])
+    out <- cbind(
+      out,
+      extra[rownames(out), , drop = FALSE]
+    )
   }
+
   out
-}
-
-#' Centered log-ratio transform for compositional fractions
-#'
-#' Cell-type fractions sum to a constant, so use CLR before regression.
-#' @param fractions Samples x cell types matrix of non-negative fractions.
-#' @param pseudo Pseudocount replacing zeros.
-#' @export
-clr_transform <- function(fractions, pseudo = 1e-3) {
-  f <- as.matrix(fractions) + pseudo
-  l <- log(f)
-  l - rowMeans(l)
-}
-
-#' Collapse rare factor levels
-#'
-#' Tissue/lineage labels often have many tiny groups that make the driver
-#' model unstable. Levels with fewer than `min_n` samples become `"Other"`.
-#' @param x Character or factor vector.
-#' @param min_n Minimum group size.
-#' @export
-collapse_rare_levels <- function(x, min_n = 15) {
-  x <- as.character(x)
-  tab <- table(x)
-  x[x %in% names(tab)[tab < min_n]] <- "Other"
-  factor(x)
 }
