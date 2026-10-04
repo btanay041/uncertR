@@ -15,9 +15,10 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          dependencies: '"hard"'
           extra-packages: any::rcmdcheck
 
-      - name: Install immunedeconv
+      - name: Install optional dependencies
         run: |
           install.packages("remotes")
           remotes::install_github("omnideconv/immunedeconv")
