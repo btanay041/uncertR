@@ -6,7 +6,6 @@ Authors@R: person("Tanay", "Belapurkar", email = "btanay041@gmail.com", role = c
 Description: Fits bootstrap ensembles of penalized regression models on bulk
     transcriptomic data, derives per-sample uncertainty scores from
     out-of-bag predictions, and tests whether technical covariates explain that uncertainty.
-License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.2.0)
