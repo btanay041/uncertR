@@ -13,6 +13,5 @@ Depends: R (>= 4.2.0)
 Imports: glmnet, future.apply, splines, stats, graphics
 Suggests: immunedeconv, SummarizedExperiment, knitr, rmarkdown
 Remotes: omnideconv/immunedeconv
-VignetteBuilder: knitrConfig/testthat/edition: 3
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0
