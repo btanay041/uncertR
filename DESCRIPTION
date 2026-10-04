@@ -11,6 +11,6 @@ Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.2.0)
 License: MIT
 Imports: glmnet, future.apply, splines, stats, graphics
-Suggests: immunedeconv, SummarizedExperiment, knitr, rmarkdown
+Suggests: SummarizedExperiment, knitr, rmarkdown
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0
