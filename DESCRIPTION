@@ -1,7 +1,7 @@
 Package: uncertR
 Type: Package
 Title: Bootstrap Prediction Uncertainty and Its Biological Drivers in Transcriptomic Models
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Tanay", "Belapurkar", email = "btanay041@gmail.com", role = c("aut", "cre"))
 Description: Fits bootstrap ensembles of penalized regression models on bulk
     transcriptomic data, derives per-sample uncertainty scores from
@@ -11,6 +11,6 @@ License: MIT
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.2.0)
 Imports: glmnet, future.apply, splines, stats, graphics
-Suggests: SummarizedExperiment, knitr, rmarkdown
+Suggests: testthat (>= 3.0.0), SummarizedExperiment, knitr, rmarkdown
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0
