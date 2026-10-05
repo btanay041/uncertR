@@ -1,10 +1,158 @@
----
-title: "Getting started with uncertR"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Getting started with uncertR}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(uncertR)
+Overview
 
-TODO: worked example on a bundled GDSC/CCLE subset.
+uncertR provides bootstrap-based estimates of prediction uncertainty for regression models. The package uses out-of-bag (OOB) predictions from bootstrap models to quantify how much predictions vary across bootstrap replicates.
+
+This vignette demonstrates the basic workflow using a small simulated gene-expression dataset. The example is intentionally small so that it runs quickly and does not require a large external dataset.
+
+Simulating gene-expression and drug-response data
+
+We first create a gene-expression matrix with genes as rows and samples as columns. We then simulate a drug-response phenotype that depends on several genes.
+
+set.seed(42)
+
+n_genes <- 100
+n_samples <- 80
+
+expr <- matrix(
+  rnorm(n_genes * n_samples),
+  nrow = n_genes,
+  ncol = n_samples,
+  dimnames = list(
+    paste0("Gene", seq_len(n_genes)),
+    paste0("Sample", seq_len(n_samples))
+  )
+)
+
+y <- 2 * expr[1, ] -
+  1.5 * expr[2, ] +
+  0.8 * expr[3, ] +
+  rnorm(n_samples, sd = 1)
+
+dim(expr)
+length(y)
+Bootstrap prediction uncertainty
+
+boot_uncertainty() fits an ensemble of bootstrap models and generates out-of-bag predictions for each sample. An observation is out-of-bag for a bootstrap replicate when that observation was not selected in the bootstrap training sample.
+
+For this example, we use 40 bootstrap replicates to keep computation relatively short.
+
+fit <- boot_uncertainty(
+  expr = expr,
+  y = y,
+  B = 40,
+  seed = 42
+)
+
+fit
+
+The OOB prediction matrix contains one column for each bootstrap replicate. Samples that were included in a particular bootstrap training set have an NA for that replicate.
+
+dim(fit$oob)
+head(fit$oob[, 1:5])
+Calculating uncertainty scores
+
+uncertainty_score() summarizes the variability of the OOB predictions for each sample. Three measures are available: standard deviation ("sd"), interquartile range ("iqr"), and confidence-interval width ("ci_width").
+
+unc_sd <- uncertainty_score(
+  fit,
+  metric = "sd",
+  min_oob = 5
+)
+
+head(unc_sd$scores)
+
+The same bootstrap predictions can be summarized using the other metrics:
+
+unc_iqr <- uncertainty_score(
+  fit,
+  metric = "iqr",
+  min_oob = 5
+)
+
+unc_ci <- uncertainty_score(
+  fit,
+  metric = "ci_width",
+  min_oob = 5
+)
+
+head(unc_iqr$scores)
+head(unc_ci$scores)
+
+Higher uncertainty scores indicate greater variation among the OOB predictions for a sample.
+
+Relating uncertainty to prediction error
+
+Prediction uncertainty and prediction error are distinct quantities. uncertainty_score() measures the dispersion of bootstrap predictions, while validate_uncertainty() can be used to examine whether estimated uncertainty is associated with prediction error.
+
+validation <- validate_uncertainty(unc_sd)
+
+validation
+Investigating potential drivers of uncertainty
+
+uncertainty_drivers() can be used to examine whether sample-level covariates are associated with estimated uncertainty.
+
+Here, we create two example covariates and use the uncertainty estimates generated above.
+
+set.seed(42)
+
+covariates <- data.frame(
+  purity = runif(n_samples),
+  technical_factor = rnorm(n_samples),
+  row.names = rownames(unc_sd$scores)
+)
+
+drivers <- uncertainty_drivers(
+  unc_sd,
+  covariates,
+  n_perm = 100,
+  seed = 42
+)
+
+drivers$table
+Additional utility functions
+
+uncertR also provides utilities for working with covariates.
+
+For example, collapse_rare_levels() combines categorical levels with fewer than a specified number of observations into "Other".
+
+tissue <- c(
+  rep("Tissue_A", 30),
+  rep("Tissue_B", 30),
+  rep("Rare", 5),
+  rep("Rare_2", 5)
+)
+
+collapse_rare_levels(tissue, min_n = 10)
+
+For compositional data such as cell-type fractions, clr_transform() applies a centered log-ratio transformation.
+
+fractions <- matrix(
+  c(
+    0.2, 0.3, 0.5,
+    0.1, 0.1, 0.8
+  ),
+  nrow = 2,
+  byrow = TRUE,
+  dimnames = list(
+    paste0("Sample", 1:2),
+    c("CellTypeA", "CellTypeB", "CellTypeC")
+  )
+)
+
+clr_transform(fractions)
+Summary
+
+A basic uncertR workflow is:
+
+Provide a gene-expression matrix and response variable.
+Generate bootstrap models and OOB predictions with boot_uncertainty().
+Summarize prediction uncertainty with uncertainty_score().
+Examine the relationship between uncertainty and prediction error with validate_uncertainty().
+Investigate potential biological or technical drivers with uncertainty_drivers().
+
+The vignette uses simulated data so that it remains lightweight, reproducible, and suitable for automated package checks without requiring a large external dataset.
