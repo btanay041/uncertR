@@ -9,7 +9,6 @@ Description: Fits bootstrap ensembles of penalized regression models on bulk
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.2.0)
-License: MIT
 Imports: glmnet, future.apply, splines, stats, graphics
 Suggests: SummarizedExperiment, knitr, rmarkdown
 VignetteBuilder: knitr
