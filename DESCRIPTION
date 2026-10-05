@@ -7,6 +7,7 @@ Description: Fits bootstrap ensembles of penalized regression models on bulk
     transcriptomic data, derives per-sample uncertainty scores from
     out-of-bag predictions, and tests whether technical covariates explain that uncertainty.
 Encoding: UTF-8
+License: MIT
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.2.0)
 Imports: glmnet, future.apply, splines, stats, graphics
