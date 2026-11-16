@@ -18,11 +18,11 @@ The workflow has three main stages:
 
 ## Installation
 
-Install the development version from GitHub:
+Install the published CRAN version
 
 ```r
-# install.packages("pak")
-pak::pak("btanay041/uncertR")
+# install.packages("uncertR")
+
 ```
 
 Then load the package:
