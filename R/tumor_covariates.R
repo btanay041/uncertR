@@ -23,10 +23,9 @@ tumor_covariates <- function(expr, methods = NULL, extra = NULL,
     out$n_detected <- colSums(expr > 0)
   }
   for (m in methods) {
-    if (!"immunedeconv" %in% rownames(utils::installed.packages()))
+    if (!requireNamespace("immunedeconv", quietly = TRUE))
       stop("Install immunedeconv to use deconvolution methods.")
     deconvolute <- getExportedValue("immunedeconv", "deconvolute")
-    
     res <- deconvolute(expr, method = m)
     mat <- as.matrix(res[, -1])
     rownames(mat) <- paste(m, res[[1]], sep = "_")
@@ -44,6 +43,9 @@ tumor_covariates <- function(expr, methods = NULL, extra = NULL,
 #' Cell-type fractions sum to a constant, so use CLR before regression.
 #' @param fractions Samples x cell types matrix of non-negative fractions.
 #' @param pseudo Pseudocount replacing zeros.
+#' @return A numeric matrix with the same dimensions as `fractions`,
+#'   containing centered log-ratio-transformed values. Each row is
+#'   centered by subtracting the mean of its log-transformed components.
 #' @export
 clr_transform <- function(fractions, pseudo = 1e-3) {
   f <- as.matrix(fractions) + pseudo
@@ -51,12 +53,16 @@ clr_transform <- function(fractions, pseudo = 1e-3) {
   l - rowMeans(l)
 }
 
+
 #' Collapse rare factor levels
 #'
 #' Tissue/lineage labels often have many tiny groups that make the driver
 #' model unstable. Levels with fewer than `min_n` samples become `"Other"`.
 #' @param x Character or factor vector.
 #' @param min_n Minimum group size.
+#' @return A factor in which levels represented by fewer than `min_n`
+#'   observations are replaced with `"Other"`. Levels meeting the threshold
+#'   are retained.
 #' @export
 collapse_rare_levels <- function(x, min_n = 15) {
   x <- as.character(x)

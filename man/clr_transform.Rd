@@ -11,6 +11,11 @@ clr_transform(fractions, pseudo = 0.001)
 
 \item{pseudo}{Pseudocount replacing zeros.}
 }
+\value{
+A numeric matrix with the same dimensions as \code{fractions},
+containing centered log-ratio-transformed values. Each row is
+centered by subtracting the mean of its log-transformed components.
+}
 \description{
 Cell-type fractions sum to a constant, so use CLR before regression.
 }

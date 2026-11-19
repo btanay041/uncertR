@@ -11,6 +11,11 @@ collapse_rare_levels(x, min_n = 15)
 
 \item{min_n}{Minimum group size.}
 }
+\value{
+A factor in which levels represented by fewer than \code{min_n}
+observations are replaced with \code{"Other"}. Levels meeting the threshold
+are retained.
+}
 \description{
 Tissue/lineage labels often have many tiny groups that make the driver
 model unstable. Levels with fewer than \code{min_n} samples become \code{"Other"}.

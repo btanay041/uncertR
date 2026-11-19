@@ -18,11 +18,11 @@ The workflow has three main stages:
 
 ## Installation
 
-Install the published CRAN version
+Install the development version from GitHub:
 
 ```r
-# install.packages("uncertR")
-
+# install.packages("pak")
+pak::pak("btanay041/uncertR")
 ```
 
 Then load the package:
@@ -173,4 +173,3 @@ For final analyses, use a sufficiently large number of bootstrap replicates. Sma
 ## Status
 
 `uncertR` is currently under active development. Interfaces and functionality may change as additional validation and modeling approaches are added.
-
