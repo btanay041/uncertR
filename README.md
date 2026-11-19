@@ -18,7 +18,7 @@ The workflow has three main stages:
 
 ## Installation
 
-Install the development version from GitHub:
+Install the published version on CRAN
 
 ```r
 # install.packages("uncertR")
