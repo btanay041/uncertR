@@ -21,8 +21,8 @@ The workflow has three main stages:
 Install the development version from GitHub:
 
 ```r
-# install.packages("pak")
-pak::pak("btanay041/uncertR")
+# install.packages("uncertR")
+
 ```
 
 Then load the package:
